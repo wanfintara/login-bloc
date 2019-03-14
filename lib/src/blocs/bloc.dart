@@ -21,4 +21,5 @@ class Bloc extends Object with Validators {
   }
 }
 
-final bloc = Bloc();
+/// *This only for global scoped bloc approach
+// final bloc = Bloc();
