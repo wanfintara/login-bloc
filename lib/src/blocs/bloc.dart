@@ -2,11 +2,21 @@ import 'dart:async';
 import 'validators.dart';
 import 'package:rxdart/rxdart.dart';
 
+/// ! Flutter => RxDart
+/// ! Stream => Observable
+/// ! StreamController => Subject
+
 // class Bloc with Validators {
 class Bloc extends Object with Validators {
-  // ! Make Stream can access multiple
-  final _email = StreamController<String>.broadcast();
-  final _password = StreamController<String>.broadcast();
+  // ! Make Stream can access multiple, add broadcast
+  // final _email = StreamController<String>.broadcast();
+  // final _password = StreamController<String>.broadcast();
+
+  /// * Flutter default [StreamController] has limited
+  /// * Cannot get the latest value
+  /// * So using the RxDart => [BehaviorSubject]
+  final _email = BehaviorSubject<String>();
+  final _password = BehaviorSubject<String>();
 
   // Add data to stream
   Stream<String> get email => _email.stream.transform(validateEmail);
@@ -18,6 +28,14 @@ class Bloc extends Object with Validators {
   // Change data
   Function(String) get changeEmail => _email.sink.add;
   Function(String) get changePassword => _password.sink.add;
+
+  submit() {
+    final validEmail = _email.value;
+    final validPassword = _password.value;
+
+    print('Email is $validEmail');
+    print('Password is $validPassword');
+  }
 
   // Need to close sink when done with it
   void dispose() {
